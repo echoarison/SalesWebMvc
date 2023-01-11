@@ -22,5 +22,13 @@ namespace SalesWebMvc.Service
             //Isso é uma operação sicrona que é uma operação aonde ela fica bloqueada esperando a operaçã finalizar 
             return _context.Seller.ToList();
         }
+
+        public void Insert(Seller obj)
+        {
+            _context.Add(obj);
+
+            //confirmando
+            _context.SaveChanges(); //salvando as mudanças no banco
+        }
     }
 }

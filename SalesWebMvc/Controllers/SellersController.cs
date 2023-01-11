@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Service;
+using SalesWebMvc.Models;
 
 namespace SalesWebMvc.Controllers
 {
@@ -20,6 +21,24 @@ namespace SalesWebMvc.Controllers
             var list = _sellerService.FindAll();
 
             return View(list);
+        }
+
+        //method GET como default
+        public IActionResult Create() 
+        {
+            return View();
+        }
+
+        //colocando uma anotação do method POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]  //e evitando ataque csrf(aproveita sua sessão e envia dados maliciosos)
+        public IActionResult Create(Seller seller) 
+        {
+            _sellerService.Insert(seller); //salvando no banco
+
+            //redirecionado
+            //return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
     }
 }
