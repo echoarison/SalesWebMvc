@@ -10,6 +10,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Data;
+using SalesWebMvc.Service;
+
 
 namespace SalesWebMvc
 {
@@ -32,7 +34,9 @@ namespace SalesWebMvc
                         builder.MigrationsAssembly("SalesWebMvc")));
             //options.UseSqlServer(Configuration.GetConnectionString("SalesWebMvcContext")));
 
+            //Agora o nosso serviços pode ser injetado em outras classes
             services.AddScoped<SeedingService>();   //isso daqui registra no serviço de dependencia dos serviços 
+            services.AddScoped<SellerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

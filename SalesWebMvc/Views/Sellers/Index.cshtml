@@ -1,9 +1,68 @@
-﻿
+﻿@model IEnumerable<SalesWebMvc.Models.Seller> //aqui estou criando um IEnumerable(para aceitar tanto list ou conjunto) do tipo Seller
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Sellers";
 }
 
-<h1>Sellers</h1>
+<h1>@ViewData["Title"]</h1>
 
-<p>Sellers index pages</p>
+<!-- fazendo a tabela -->
+
+<table class="table table-striped table-hover">
+    
+    <thead>
+
+        <tr class="table-secondary">
+              <th>
+                  <!--usando a ferramenta do frameWork para buscar o nome-->
+                  @Html.DisplayNameFor(model => model.Name) <!-- usando a expressão lambda para pegar o nome em model -->  
+              </th>
+              <th>
+                  <!--usando a ferramenta do frameWork para buscar o nome-->
+                  @Html.DisplayNameFor(model => model.Email) <!-- usando a expressão lambda para pegar o nome em model -->  
+              </th> 
+              <th>
+                  <!--usando a ferramenta do frameWork para buscar o nome-->
+                  @Html.DisplayNameFor(model => model.BirthDate) <!-- usando a expressão lambda para pegar o nome em model -->  
+              </th>  
+              <th>
+                  <!--usando a ferramenta do frameWork para buscar o nome-->
+                  @Html.DisplayNameFor(model => model.BaseSalary) <!-- usando a expressão lambda para pegar o nome em model -->  
+              </th>
+              <th></th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+        <!-- E aqui usando o Model para jogar dentro de item -->
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>
+                    <!-- Aqui usando a expressão lambda para pegar os valores do model -->
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <!-- Aqui usando a expressão lambda para pegar os valores do model -->
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    <!-- Aqui usando a expressão lambda para pegar os valores do model -->
+                    @Html.DisplayFor(modelItem => item.BirthDate)
+                </td>
+                <td>
+                    <!-- Aqui usando a expressão lambda para pegar os valores do model -->
+                    @Html.DisplayFor(modelItem => item.BaseSalary)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
 
