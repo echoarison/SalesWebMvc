@@ -34,5 +34,21 @@ namespace SalesWebMvc.Service
             //confirmando
             _context.SaveChanges(); //salvando as mudanças no banco
         }
+
+        public Seller FindById(int id) 
+        {
+            //buscando o id do seller
+            return _context.Seller.FirstOrDefault(obj => obj.Id == id);
+        }
+
+        public void Remove(int id) 
+        {
+            var obj = _context.Seller.Find(id); //encontrar o seller
+            _context.Seller.Remove(obj);    //removi Db o obj seller
+
+            //confirmando e salvando
+            _context.SaveChanges();
+
+        }
     }
 }
