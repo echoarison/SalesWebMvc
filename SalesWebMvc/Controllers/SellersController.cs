@@ -1,18 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Service;
 using SalesWebMvc.Models;
+using SalesWebMvc.Models.ViewModels;
 
 namespace SalesWebMvc.Controllers
 {
     public class SellersController : Controller
     {
-        //criando uma dependecia do SellerService
+        //criando uma dependecia do SellerService, DepartmentService
         private readonly SellerService _sellerService;
+        private readonly DepartmentService _departmentService;
 
         //construtor
-        public SellersController(SellerService sellerService) 
+        public SellersController(SellerService sellerService, DepartmentService departmentService) 
         {
             _sellerService = sellerService;
+            _departmentService = departmentService;
         }
 
         public IActionResult Index()
@@ -26,7 +29,11 @@ namespace SalesWebMvc.Controllers
         //method GET como default
         public IActionResult Create() 
         {
-            return View();
+            //carregando os departments
+            var departments = _departmentService.FindAll();
+            var viewModel = new SellerFormViewModel { Departments = departments };
+
+            return View(viewModel); //quando entrar na pagina create já vai ta carregado os department
         }
 
         //colocando uma anotação do method POST
