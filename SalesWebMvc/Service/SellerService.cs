@@ -2,6 +2,7 @@
 using SalesWebMvc.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace SalesWebMvc.Service
 {
@@ -38,7 +39,9 @@ namespace SalesWebMvc.Service
         public Seller FindById(int id) 
         {
             //buscando o id do seller
-            return _context.Seller.FirstOrDefault(obj => obj.Id == id);
+            //return _context.Seller.FirstOrDefault(obj => obj.Id == id); //só o seller
+            return _context.Seller.Include(obj => obj.Department).FirstOrDefault(obj => obj.Id == id); //aqui seria um innerjoin da tabela seller and department
+
         }
 
         public void Remove(int id) 
