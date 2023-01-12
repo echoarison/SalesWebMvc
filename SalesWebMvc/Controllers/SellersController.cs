@@ -4,6 +4,7 @@ using SalesWebMvc.Models;
 using SalesWebMvc.Models.ViewModels;
 using System.Collections.Generic;
 using SalesWebMvc.Service.Exceptions;
+using System.Diagnostics;
 
 namespace SalesWebMvc.Controllers
 {
@@ -55,7 +56,7 @@ namespace SalesWebMvc.Controllers
             //aqui eu sei que foi feita uma solicitação fora dos parametros
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided"});  //redirecionando para Action Error,dentro Redirect tem a pagina e o parametro pra ela com um obj anonimo
             }
 
             //pegando o obj
@@ -63,7 +64,7 @@ namespace SalesWebMvc.Controllers
 
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });  //redirecionando para Action Error,dentro Redirect tem a pagina e o parametro pra ela com um obj anonimo
             }
 
             return View(obj);
@@ -83,7 +84,7 @@ namespace SalesWebMvc.Controllers
             //aqui eu sei que foi feita uma solicitação fora dos parametros
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided" });  //redirecionando para Action Error,dentro Redirect tem a pagina e o parametro pra ela com um obj anonimo
             }
 
             //pegando o obj
@@ -91,7 +92,7 @@ namespace SalesWebMvc.Controllers
 
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });  //redirecionando para Action Error,dentro Redirect tem a pagina e o parametro pra ela com um obj anonimo
             }
 
             return View(obj);
@@ -102,7 +103,7 @@ namespace SalesWebMvc.Controllers
             //vendo se é null
             if (id == null) 
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided" });  //redirecionando para Action Error,dentro Redirect tem a pagina e o parametro pra ela com um obj anonimo
             }
 
             var obj = _sellerService.FindById(id.Value);
@@ -110,7 +111,7 @@ namespace SalesWebMvc.Controllers
             //buscando obj
             if (obj == null) 
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });  //redirecionando para Action Error,dentro Redirect tem a pagina e o parametro pra ela com um obj anonimo
             }
 
             List<Department> departments = _departmentService.FindAll(); //pegando tudo e jogando na lista
@@ -127,7 +128,7 @@ namespace SalesWebMvc.Controllers
             //testando se é diferente
             if (id != seller.Id)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = "Id mismatch" });  //redirecionando para Action Error,dentro Redirect tem a pagina e o parametro pra ela com um obj anonimo
             }
 
             //tentando executar o update e se não dá certo tratando Exception
@@ -137,14 +138,28 @@ namespace SalesWebMvc.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch (NotFoundException)
+            catch (NotFoundException e)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = e.Message });  //redirecionando para Action Error,dentro Redirect tem a pagina e o parametro pra ela com um obj anonimo
             }
-            catch (DbConcurrencyException) 
+            catch (DbConcurrencyException e) 
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = e.Message });  //redirecionando para Action Error,dentro Redirect tem a pagina e o parametro pra ela com um obj anonimo
             }
+        }
+
+        //criando um erro personalizado
+        public IActionResult Error(string message) 
+        {
+            //aqui esta criando um novo ErrorViewModel
+            var viewModel = new ErrorViewModel
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier //aqui na primeira interrogação é o id opicional e na segunda é a verificação de ser null
+            };
+
+            return View(viewModel);
+
         }
 
     }
