@@ -34,7 +34,7 @@ namespace SalesWebMvc.Models
 
         [Display(Name = "Department")]
         public int DepartmentId { get; set; }   //esse Id tem que existe, pois não pode ficar null
-        public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>();  //instanciando a ICollection
+        public ICollection<SalesRecords> Sales { get; set; } = new List<SalesRecords>();  //instanciando a ICollection
 
         //construtor
         public Seller()
@@ -54,12 +54,12 @@ namespace SalesWebMvc.Models
         }
 
         //methods
-        public void AddSales(SalesRecord sr) 
+        public void AddSales(SalesRecords sr) 
         {
             Sales.Add(sr);  //add na list ICollection
         }
 
-        public void RemoveSales(SalesRecord sr) 
+        public void RemoveSales(SalesRecords sr) 
         {
             Sales.Remove(sr);
         }

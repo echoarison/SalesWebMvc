@@ -3,7 +3,7 @@ using System;
 
 namespace SalesWebMvc.Models
 {
-    public class SalesRecord
+    public class SalesRecords
     {
         //atributos
         public int Id { get; set; }
@@ -13,13 +13,13 @@ namespace SalesWebMvc.Models
         public Seller Seller { get; set; }
 
         //Construtor
-        public SalesRecord() 
+        public SalesRecords() 
         {
 
         }
 
         //Construtor com arguments
-        public SalesRecord(int id, DateTime date, double amount, SaleStatus status, Seller seller) 
+        public SalesRecords(int id, DateTime date, double amount, SaleStatus status, Seller seller) 
         {
 
             Id = id;
