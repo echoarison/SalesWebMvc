@@ -2,7 +2,8 @@
 using SalesWebMvc.Models;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore; //necessario para poder usar o include(), pois seria um innerjoin
+using SalesWebMvc.Service.Exceptions;
 
 namespace SalesWebMvc.Service
 {
@@ -52,6 +53,25 @@ namespace SalesWebMvc.Service
             //confirmando e salvando
             _context.SaveChanges();
 
+        }
+
+        public void Update(Seller obj)
+        {
+            if (!_context.Seller.Any(x => x.Id == obj.Id))  //se não existe alguma coisa  no banco de dados
+            {
+                throw new NotFoundException("Id not found");
+            }
+
+            try
+            {
+                _context.Update(obj);   // atualizando obj no Db
+                _context.SaveChanges();
+
+            }
+            catch(DbUpdateConcurrencyException e)   //exception do update db
+            {
+                throw new DbConcurrencyException(e.Message);
+            }
         }
     }
 }
