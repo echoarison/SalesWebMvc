@@ -44,6 +44,11 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]  //e evitando ataque csrf(aproveita sua sessão e envia dados maliciosos)
         public IActionResult Create(Seller seller)
         {
+            if (!ModelState.IsValid) 
+            {
+                return View(seller);
+            }
+
             _sellerService.Insert(seller); //salvando no banco
 
             //redirecionado
@@ -125,6 +130,16 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Seller seller) 
         {
+            //verificando se o objeto foi validado
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll();
+
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+
+                return View(viewModel);
+            }
+
             //testando se é diferente
             if (id != seller.Id)
             {
