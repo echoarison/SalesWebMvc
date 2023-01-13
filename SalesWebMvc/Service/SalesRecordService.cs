@@ -24,9 +24,9 @@ namespace SalesWebMvc.Service
             //construindo um objeto de consulta
             var result = from obj in _context.SalesRecords select obj;
 
-            if (minDate.HasValue) 
+            if (minDate.HasValue)
             {
-               result = result.Where(x => x.Date >= minDate.Value);
+                result = result.Where(x => x.Date >= minDate.Value);
             }
 
             if (maxDate.HasValue)
@@ -39,6 +39,33 @@ namespace SalesWebMvc.Service
                 .Include(x => x.Seller)
                 .Include(x => x.Seller.Department)
                 .OrderByDescending(x => x.Date)
+                .ToListAsync();
+
+        }
+
+        //nessa busca o resultado vai seruma List de IGroup
+        public async Task<List<IGrouping<Department,SalesRecords>>> FindByDateGroupingAsync(DateTime? minDate, DateTime? maxDate)
+        {
+            //construindo um objeto de consulta
+            var result = from obj in _context.SalesRecords select obj;
+
+
+            if (minDate.HasValue)
+            {
+                result = result.Where(x => x.Date >= minDate.Value);
+            }
+
+            if (maxDate.HasValue)
+            {
+                result = result.Where(x => x.Date <= maxDate.Value);
+            }
+
+            //Fazendo um inner join com os outros objetos ou entities e ainda com Async
+            return await result
+                .Include(x => x.Seller)
+                .Include(x => x.Seller.Department)
+                .OrderByDescending(x => x.Date)
+                .GroupBy(x => x.Seller.Department)
                 .ToListAsync();
 
         }
