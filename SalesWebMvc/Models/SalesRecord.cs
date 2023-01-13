@@ -29,5 +29,16 @@ namespace SalesWebMvc.Models
             Seller = seller;
 
         }
+
+        public string FormatedDate()
+        {
+            return Date.ToString("dd/MM/yyyy");
+        }
+
+        public string FormatedAmout(string coin)
+        {
+            var fixedAmout = this.Amount.ToString("F2");
+            return string.Format("{0} {1}", coin, fixedAmout);
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IGrouping<Department, SalesRecords>> //os dados das vendas
+﻿@model IList<SalesRecords> //os dados das vendas
 
 @{
     ViewData["Title"] = "Grouping Search";
@@ -34,7 +34,7 @@
 {
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Department @departmentGroup.Key.Name, Total sales = @departmentGroup.Key.TotalSales(minDate,maxDate).ToString("F2")</h3>
+            <h3 class="panel-title">Department @departmentGroup.Seller.Department.Name, Total sales = @departmentGroup.Seller.Department.TotalSales(minDate,maxDate).ToString("F2")</h3>
         </div>
 
         <div class="panel-body">
@@ -57,15 +57,17 @@
                 </thead>
 
                 <tbody>
-                    @foreach (var item in departmentGroup)
+                    @foreach (var item in Model)
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Date)
+                                @*@Html.DisplayFor(modelItem => item.Date)*@
+                                <label>@item.FormatedDate()</label>
                             </td>
 
                             <td>
-                                @Html.DisplayFor(modelItem => item.Amount)
+                                @*@Html.DisplayFor(modelItem => item.Amount)*@
+                                <label>@item.FormatedAmout("RS$")</label>
                             </td>
 
                             <td>
@@ -83,3 +85,29 @@
     </div>
 }
 
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            colorDisplay();
+        });
+
+        function colorDisplay() {
+            var value = document.querySelectorAll("tr > td:nth-child(4)");
+            Array.from(value).forEach(function(e) {
+                var text = e.textContent.trim();
+
+                if (text === "Billed") {
+                    e.setAttribute("style", "color: green !important;");
+                }
+
+                if (text === "Pending") {
+                    e.setAttribute("style", "color: yellow !important;");
+                }
+
+                if (text === "Canceled") {
+                    e.setAttribute("style", "color: red !important;");
+                }
+            });
+        }
+    </script>
+}
